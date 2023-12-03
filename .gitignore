@@ -1,0 +1,8 @@
+.env
+old_data/
+chromadb/
+downloaded_images/
+pysqlite3/
+testing/
+__pycache__/
+sqlite/
