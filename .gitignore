@@ -1,14 +1,8 @@
 .env
 old_data/
-chromadb/
 downloaded_images/
 pysqlite3/
 testing/
 __pycache__/
 sqlite/
-data/Principles of Neural Science, Fifth - KANDEL.pdf
-data/IllustratedBhagavadGita.pdf
-data/Illustrated-Bhagavad-Gita.pdf
-data/s-molecularcellbiology.pdf
-data/
 .DS_Store
