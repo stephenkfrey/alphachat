@@ -21,15 +21,17 @@ print('chroma heartbeat: ', chroma_client.heartbeat()) # returns a nanosecond he
 qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="multi-qa-MiniLM-L6-cos-v1")
 
 ## Set up Collection 
-collection = chroma_client.get_collection(name="imagecoll", embedding_function=qa_embed_fun)
+
 
 ############ Add to db ############
-def add_list_of_dicts_to_collection(data, collection=collection, embed_func=qa_embed_fun):
+def add_list_of_dicts_to_collection(data, embed_func=qa_embed_fun, collection_name="AIML"):
     documents = []
     embeddings = []
     metadatas = []
     ids = []
     print('\n\n### add list of dicts to collection -- data', data)
+
+    collection = chroma_client.get_collection(name=collection_name, embedding_function=qa_embed_fun)
 
     for item in data: # data is a list of dicts 
         documents.append(item['prompt']) 
@@ -50,7 +52,7 @@ def add_list_of_dicts_to_collection(data, collection=collection, embed_func=qa_e
     return result 
 
 ############ Query document ############
-def query_db(query_text, collection_name="imagecoll", num_results=2): 
+def query_db(query_text, collection_name="AIML", num_results=2): 
     print("query text ",query_text)
 
     collection = chroma_client.get_collection(name=collection_name, embedding_function=qa_embed_fun) # this took 0.0010 seconds 

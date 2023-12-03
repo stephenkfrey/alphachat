@@ -8,7 +8,8 @@ app = Flask(__name__)
 def query():
     prompt = request.json['prompt']
     collection_name = request.json['collection_name']
-    result = query_db(prompt,collection_name)
+    num_results = request.json['num_results']
+    result = query_db(prompt, collection_name, num_results)
     return jsonify(result)
 
 if __name__ == '__main__':

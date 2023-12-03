@@ -17,7 +17,7 @@ qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_na
 
 # create collection
 collection = chroma_client.create_collection(
-        name="imagecoll",
+        name="AIML",
         metadata={"hnsw:space": "cosine"}, # l2 is the default
         embedding_function=qa_embed_fun
 )

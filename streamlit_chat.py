@@ -6,6 +6,9 @@ from openai import OpenAI
 
 from openai_functions import create_chat_completion
 
+RETRIEVAL_RELEVANCE_THRESHOLD=0.3
+NUM_RETRIEVAL_RESULTS = 3
+
 ############ Streamlit Setup ############
 # layout widemode
 st.set_page_config(
@@ -51,7 +54,8 @@ def get_retrievals_from_server(prompt):
     selected_db_name = selected_db.replace('\n', '').replace(' ', '')
     response = requests.post('http://localhost:5000/query', 
                              json={'prompt': prompt, 
-                                   'collection_name': selected_db_name}
+                                   'collection_name': selected_db_name,
+                                   "num_results":NUM_RETRIEVAL_RESULTS}
                                    )
     result = response.json()
     return result 
@@ -71,8 +75,8 @@ if user_prompt := st.chat_input(placeholder="How do generative video models work
         ########### Get and filter retrievals ###########
         retrievals = get_retrievals_from_server(user_prompt) 
 
-        # Filter out retrievals with distance greater than 0.5
-        filtered_retrievals = [doc for doc, dist in zip(retrievals['documents'][0], retrievals['distances'][0]) if dist < 0.5]
+        # Filter out retrievals with distance greater than THRESHOLD 
+        filtered_retrievals = [doc for doc, dist in zip(retrievals['documents'][0], retrievals['distances'][0]) if dist > RETRIEVAL_RELEVANCE_THRESHOLD]
         retrievals['documents'][0] = filtered_retrievals
         print(retrievals)
     #################################################

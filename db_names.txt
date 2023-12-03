@@ -1,4 +1,3 @@
-imagecoll
-Generative AI
+AIML
 Illustrated Bhagavad Gita
 Cell Biology 
