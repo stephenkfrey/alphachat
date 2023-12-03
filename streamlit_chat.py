@@ -28,14 +28,14 @@ selected_db = one.selectbox("Select a database", db_names)
 ############ Body, Sidebar Columns ############
 st.markdown("---")  # Horizontal line for separation
 body, sidebar = st.columns(2)  # Create two columns
-body.markdown("## Words")
-sidebar.markdown("## Images")
+body.markdown("### Words")
+sidebar.markdown("### Images")
 
 ############ Initialize chat message history ############
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "I can show you the world 🌍. What do you want to learn about?"}
+        {"role": "assistant", "content": "👀 🔎 🌍. What do you want to understand more?"}
     ]
 if "response" not in st.session_state:
     st.session_state["response"] = None
