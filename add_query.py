@@ -50,11 +50,13 @@ def add_list_of_dicts_to_collection(data, collection=collection, embed_func=qa_e
     return result 
 
 ############ Query document ############
-def query_db(query_text): 
+def query_db(query_text, collection_name="imagecoll", num_results=2): 
     print("query text ",query_text)
+
+    collection = chroma_client.get_collection(name=collection_name, embedding_function=qa_embed_fun) # this took 0.0010 seconds 
 
     results = collection.query(
         query_texts=[query_text],
-        n_results=2
+        n_results=num_results
     )
     return results 

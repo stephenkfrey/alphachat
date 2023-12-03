@@ -4,9 +4,7 @@ import sys
 import pysqlite3
 sys.modules['sqlite3'] = pysqlite3
 ### ###
-import uuid
-import chromadb
-from chromadb.utils import embedding_functions
+
 from add_query import query_db
 ####### ####### 
 

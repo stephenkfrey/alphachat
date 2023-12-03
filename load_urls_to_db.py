@@ -17,7 +17,8 @@ def load_urls_to_db(url_list):
                 "prompt": single_image_dict['caption'],
                 "metadata": {
                     "page_url": url, 
-                    "image_url":single_image_dict['image_url']
+                    "image_url":single_image_dict['image_url'],
+                    "page_title": single_image_dict['page_title']
                     }
             }
             data_list.append(data)

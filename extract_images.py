@@ -77,6 +77,7 @@ def extract_image_caption_sets_from_url(url, save_directory="downloaded_images")
         list_of_image_dicts.append({
             'image_url': image_url, 
             'caption': caption,
+            'page_title':page_title,
             # 'image_name': image_name,
             # 'text_before': text_before,
             # 'text_after': text_after,
