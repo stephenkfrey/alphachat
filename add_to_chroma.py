@@ -21,7 +21,7 @@ qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_na
 collection = chroma_client.get_collection(name="imagecoll", embedding_function=qa_embed_fun)
 
 ############ Main Add function ############
-def add_to_collection(collection, data, embed_func):
+def add_to_collection(data, collection=collection, embed_func=qa_embed_fun):
     documents = []
     embeddings = []
     metadatas = []
