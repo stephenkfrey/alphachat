@@ -1,15 +1,16 @@
-### Sqlite3 replacement for Chroma ### 
+####################################
+## Sqlite3 replacement for Chroma ##
 import os
 import sys
 import pysqlite3
 sys.modules['sqlite3'] = pysqlite3
 sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
 print(sys.modules['sqlite3'])
-
-### ###
+####################################
 import uuid
 import chromadb
 from chromadb.utils import embedding_functions
+####################################
 
 chroma_client = chromadb.PersistentClient(path="chromadb")
 
@@ -22,7 +23,7 @@ qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_na
 ## Set up Collection 
 collection = chroma_client.get_collection(name="imagecoll", embedding_function=qa_embed_fun)
 
-############ Add ############
+############ Add to db ############
 def add_list_of_dicts_to_collection(data, collection=collection, embed_func=qa_embed_fun):
     documents = []
     embeddings = []
@@ -48,7 +49,7 @@ def add_list_of_dicts_to_collection(data, collection=collection, embed_func=qa_e
     )
     return result 
 
-############ Add ############
+############ Query document ############
 def query_db(query_text): 
     print("query text ",query_text)
 
