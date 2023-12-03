@@ -10,7 +10,7 @@ import chromadb
 from chromadb.utils import embedding_functions
 
 # create client 
-chroma_client = chromadb.PersistentClient(path="chromadb")
+chroma_client = chromadb.PersistentClient(path="./chromadb")
 
 # create embed function 
 qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="multi-qa-MiniLM-L6-cos-v1")

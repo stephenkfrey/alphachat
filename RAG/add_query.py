@@ -12,7 +12,7 @@ import chromadb
 from chromadb.utils import embedding_functions
 ####################################
 
-chroma_client = chromadb.PersistentClient(path="chromadb")
+chroma_client = chromadb.PersistentClient(path="./chromadb")
 
 ## Connect to saved chroma db 
 print('chroma heartbeat: ', chroma_client.heartbeat()) # returns a nanosecond heartbeat. Useful for making sure the client remains connected.

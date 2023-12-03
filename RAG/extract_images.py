@@ -46,7 +46,7 @@ def extract_text_around_image(img_tag):
 
 ###### Main ###### 
 
-def extract_image_caption_sets_from_url(url, save_directory="downloaded_images"):
+def extract_image_caption_sets_from_url(url, save_directory="./downloaded_images"):
     response = requests.get(url)
     if response.status_code != 200:
         print(f"Error: Unable to fetch the webpage. Status code: {response.status_code}")
