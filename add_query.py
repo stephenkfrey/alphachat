@@ -3,9 +3,11 @@ import os
 import sys
 import pysqlite3
 sys.modules['sqlite3'] = pysqlite3
+sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
+print(sys.modules['sqlite3'])
+
 ### ###
 import uuid
-
 import chromadb
 from chromadb.utils import embedding_functions
 
@@ -20,26 +22,38 @@ qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_na
 ## Set up Collection 
 collection = chroma_client.get_collection(name="imagecoll", embedding_function=qa_embed_fun)
 
-############ Main Add function ############
-def add_to_collection(data, collection=collection, embed_func=qa_embed_fun):
+############ Add ############
+def add_list_of_dicts_to_collection(data, collection=collection, embed_func=qa_embed_fun):
     documents = []
     embeddings = []
     metadatas = []
     ids = []
+    print('\n\n### add list of dicts to collection -- data', data)
 
-    for item in data:
-        documents.append(item['prompts'])
-        embeddings.append(embed_func([item['responses']])[0])
-        metadatas.append(item['metadata'])
-        ids.append(str(uuid.uuid4()))
-
-    print (documents, embeddings, metadatas, ids) 
+    for item in data: # data is a list of dicts 
+        documents.append(item['prompt']) 
+        # embeddings.append(embed_func([item['prompt']])[0]) 
+        metadatas.append(item['metadata']) 
+        ids.append(str(uuid.uuid4())) 
+    
+    print ("documents",documents)
+    print("metadatas",metadatas)
+    print("ids",ids)
 
     result = collection.add(
         documents=documents,
-        embeddings=embeddings,
+        # embeddings=embeddings,
         metadatas=metadatas,
         ids=ids
     )
     return result 
 
+############ Add ############
+def query_db(query_text): 
+    print("query text ",query_text)
+
+    results = collection.query(
+        query_texts=[query_text],
+        n_results=2
+    )
+    return results 

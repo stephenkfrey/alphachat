@@ -21,4 +21,3 @@ collection = chroma_client.create_collection(
         metadata={"hnsw:space": "cosine"}, # l2 is the default
         embedding_function=qa_embed_fun
 )
-

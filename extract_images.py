@@ -54,7 +54,10 @@ def extract_image_caption_sets_from_url(url, save_directory="downloaded_images")
 
     soup = BeautifulSoup(response.content, 'html.parser')
     images = soup.find_all('img')
-    data = []
+    list_of_image_dicts = []
+    page_title = soup.title.string if soup.title else "No title"
+
+    print (f"\n ===== Extracting images from {page_title} =====\n")
 
     for index, img in enumerate(images):
         image_url = img['src']
@@ -68,10 +71,10 @@ def extract_image_caption_sets_from_url(url, save_directory="downloaded_images")
         figure = img.find_parent('figure')
         caption = figure.figcaption.get_text().strip() if figure and figure.figcaption else "No caption"
 
-        text_before, text_after = extract_text_around_image(img)
+        # text_before, text_after = extract_text_around_image(img)
         # references = "(placeholder) References to the image"
 
-        data.append({
+        list_of_image_dicts.append({
             'image_url': image_url, 
             'caption': caption,
             # 'image_name': image_name,
@@ -80,17 +83,19 @@ def extract_image_caption_sets_from_url(url, save_directory="downloaded_images")
             # 'references': references
         })
 
-    return data
+    pprint (list_of_image_dicts)
+
+    return list_of_image_dicts
 
 ###### Example ###### 
 
-url = "https://www.arxiv-vanity.com/papers/2208.12266/"
-save_directory = "downloaded_images" 
+# url = "https://www.arxiv-vanity.com/papers/2208.12266/"
+# save_directory = "downloaded_images" 
 
-if not os.path.exists(save_directory):
-    os.makedirs(save_directory)
+# if not os.path.exists(save_directory):
+#     os.makedirs(save_directory)
 
-image_caption_pairs = extract_image_caption_sets_from_url(url)
+# image_caption_pairs = extract_image_caption_sets_from_url(url)
 
-pprint(image_caption_pairs)
+# pprint(image_caption_pairs)
 
