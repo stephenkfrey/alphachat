@@ -2,17 +2,17 @@
 ## Sqlite3 replacement for Chroma ##
 import os
 import sys
-import pysqlite3
-sys.modules['sqlite3'] = pysqlite3
-sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
-print(sys.modules['sqlite3'])
+#import pysqlite3
+#sys.modules['sqlite3'] = pysqlite3
+#sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
+#print(sys.modules['sqlite3'])
 ####################################
 import uuid
 import chromadb
 from chromadb.utils import embedding_functions
 ####################################
 
-chroma_client = chromadb.PersistentClient(path="/chromadb/")
+chroma_client = chromadb.PersistentClient(path="./chromadb/")
 # client = chromadb.PersistentClient(path="/path/to/data")
 
 
