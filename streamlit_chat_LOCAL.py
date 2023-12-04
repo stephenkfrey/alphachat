@@ -3,19 +3,7 @@ import streamlit as st
 import requests
 import json
 from openai import OpenAI
-
 from openai_functions import create_chat_completion
-
-# from chroma.add_query import query_db
-
-####################################
-
-from dotenv import load_dotenv
-load_dotenv()
-from chromadb.config import Settings
-CHROMA_SERVER_HOST = os.getenv('CHROMA_SERVER_HOST')
-print (CHROMA_SERVER_HOST)
-####################################
 
 RETRIEVAL_RELEVANCE_THRESHOLD=0.3
 NUM_RETRIEVAL_RESULTS = 3
@@ -63,17 +51,13 @@ for msg in messages:
 
 def get_retrievals_from_server(prompt): 
     selected_db_name = selected_db.replace('\n', '').replace(' ', '')
-
-    response = requests.post(f"https://{CHROMA_SERVER_HOST}/api/v1/query", 
+    response = requests.post('http://localhost:5000/query', 
                              json={'prompt': prompt, 
                                    'collection_name': selected_db_name,
                                    "num_results":NUM_RETRIEVAL_RESULTS}
                                    )
     result = response.json()
     return result 
-
-    # result = query_db(prompt, collection_name=selected_db_name, num_results=NUM_RETRIEVAL_RESULTS)
-    # return result
 
 ############ Main conversation and retrieval loop ############
 

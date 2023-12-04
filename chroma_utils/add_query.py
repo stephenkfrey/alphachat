@@ -10,9 +10,15 @@ print(sys.modules['sqlite3'])
 import uuid
 import chromadb
 from chromadb.utils import embedding_functions
+from dotenv import load_dotenv
+load_dotenv()
 ####################################
 
-chroma_client = chromadb.PersistentClient(path="./chromadb")
+
+from chromadb.config import Settings
+CHROMA_SERVER_HOST = os.getenv('CHROMA_SERVER_HOST')
+print (CHROMA_SERVER_HOST)
+chroma_client = chromadb.HttpClient(host=CHROMA_SERVER_HOST, port=8000)
 
 ## Connect to saved chroma db 
 print('chroma heartbeat: ', chroma_client.heartbeat()) # returns a nanosecond heartbeat. Useful for making sure the client remains connected.

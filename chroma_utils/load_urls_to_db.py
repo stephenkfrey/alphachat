@@ -28,10 +28,10 @@ def load_urls_to_db(url_list):
 
 #######  Run ####### 
 
-url_list = [
-    "https://www.arxiv-vanity.com/papers/2308.09592/", 
-    "https://www.arxiv-vanity.com/papers/1311.2901/", 
-    "https://www.arxiv-vanity.com/papers/2208.12266/"
-    ] 
+# url_list = [
+#     "https://www.arxiv-vanity.com/papers/2308.09592/", 
+#     "https://www.arxiv-vanity.com/papers/1311.2901/", 
+#     "https://www.arxiv-vanity.com/papers/2208.12266/"
+#     ] 
 
-results = load_urls_to_db(url_list)
+# results = load_urls_to_db(url_list)
