@@ -6,7 +6,7 @@ import sys
 import pysqlite3
 sys.modules['sqlite3'] = pysqlite3
 
-sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
+#sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
 ### ###
 # 
 # import chromadb
