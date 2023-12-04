@@ -12,7 +12,9 @@ import chromadb
 from chromadb.utils import embedding_functions
 ####################################
 
-chroma_client = chromadb.PersistentClient(path="./chromadb")
+chroma_client = chromadb.PersistentClient(path="/chromadb/")
+# client = chromadb.PersistentClient(path="/path/to/data")
+
 
 ## Connect to saved chroma db 
 print('chroma heartbeat: ', chroma_client.heartbeat()) # returns a nanosecond heartbeat. Useful for making sure the client remains connected.
@@ -21,7 +23,6 @@ print('chroma heartbeat: ', chroma_client.heartbeat()) # returns a nanosecond he
 qa_embed_fun = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="multi-qa-MiniLM-L6-cos-v1")
 
 ## Set up Collection 
-
 
 ############ Add to db ############
 def add_list_of_dicts_to_collection(data, embed_func=qa_embed_fun, collection_name="AIML"):

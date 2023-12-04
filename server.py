@@ -1,6 +1,6 @@
 # server.py
 from flask import Flask, request, jsonify
-from RAG import add_query
+import add_query
 
 app = Flask(__name__)
 
