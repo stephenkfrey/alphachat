@@ -5,7 +5,7 @@ import json
 #from openai import OpenAI
 import openai
 
-from app.openai_functions import create_chat_completion
+from openai_functions import create_chat_completion
 
 RETRIEVAL_RELEVANCE_THRESHOLD=0.3
 NUM_RETRIEVAL_RESULTS = 3
@@ -23,7 +23,7 @@ st.markdown("<h1 style='text-align: center;'>✨ AlphaChat ✨</h1>", unsafe_all
 ############ Select a collection ############
 one,two,three,four,five=st.columns(5)
 # Read the database names from db_names.txt
-with open('db_names.txt', 'r') as file:
+with open('app/db_names.txt', 'r') as file:
     db_names = file.readlines()
 
 # Create a dropdown menu to display the database names

@@ -1,5 +1,5 @@
 import requests
-from db_query_data import query_db
+from src.scripts.db_query_data import query_db
 
 ####### ####### 
 
@@ -10,7 +10,7 @@ print('\n\n\n------------\n direct query_db result - \n',result)
 selected_db = "AIML"
 def get_retrievals_from_server(prompt): 
     selected_db_name = selected_db.replace('\n', '').replace(' ', '')
-    response = requests.post('http://localhost:5000/query', 
+    response = requests.post('http://127.0.0.1:5000/query', 
                              json={'prompt': prompt, 
                                    'collection_name': selected_db_name,
                                    "num_results":3}

@@ -3,7 +3,7 @@ import uuid
 from init_chroma_client import CHROMA_CLIENT, QA_EMBED_FUN 
 from config import COLLECTION_NAME, TEST_COLLECTION_NAME, DATABASE_LOCAL_PATH, DATABASE_REMOTE_URL
 
-from util_extract_images import extract_image_caption_sets_from_url
+from src.utils.extract_images import extract_image_caption_sets_from_url
 
 ############ Helpers ############
 def add_data_to_collection(chroma_client, collection_name, documents, metadatas, ids,  embed_func): 

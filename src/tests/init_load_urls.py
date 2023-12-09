@@ -1,11 +1,11 @@
-from db_add_data import add_url_list_to_collection
+from src.scripts.db_add_data import add_url_list_to_collection
 
 user_command = input("Enter which initial dataset to load into the db (TEST or FULL): ")
 if user_command.upper() == "TEST":
     arxiv_vanity_links = [
         "https://www.arxiv-vanity.com/papers/2204.06125/",
         "https://www.arxiv-vanity.com/papers/2201.03545/",
-        "https://www.arxiv-vanity.com/papers/2204.02311/",
+        "https://www.arxiv-vanity.com/papers/2208.12266/",
     ]
 elif user_command.upper() == "FULL":
     arxiv_vanity_links = [

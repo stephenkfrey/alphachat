@@ -1,17 +1,13 @@
-import chromadb
-from chromadb.config import Settings
-
-from init_chroma_client import CHROMA_CLIENT, QA_EMBED_FUN 
+from init_chroma_client import CHROMA_CLIENT, QA_EMBED_FUN, Settings, chromadb
 from config import COLLECTION_NAME, TEST_COLLECTION_NAME, DATABASE_LOCAL_PATH, DATABASE_REMOTE_URL
-
 ####################################
 ### HELPERS 
 
 def create_collection(client, collection_name): 
-    collection = client.create_collection(
+    collection = CHROMA_CLIENT.create_collection(
         name=collection_name,
         metadata={"hnsw:space": "cosine"}, # l2 is the default
-        embedding_function=qa_embed_fun, 
+        embedding_function=QA_EMBED_FUN, 
         
     )
     print ("client heartbeat: " , client.heartbeat())
