@@ -1,8 +1,11 @@
+todo.md
+
+
+####
 .env
-old_data/
-downloaded_images/
+__pycache__/
+.DS_Store
 pysqlite3/
 testing/
-__pycache__/
 sqlite/
-.DS_Store
+src/scripts/__pycache__/

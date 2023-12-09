@@ -5,7 +5,7 @@ import json
 #from openai import OpenAI
 import openai
 
-from openai_functions import create_chat_completion
+from app.openai_functions import create_chat_completion
 
 RETRIEVAL_RELEVANCE_THRESHOLD=0.3
 NUM_RETRIEVAL_RESULTS = 3
@@ -53,12 +53,12 @@ for msg in messages:
 
 def get_retrievals_from_server(prompt): 
     selected_db_name = selected_db.replace('\n', '').replace(' ', '')
-    response = requests.post('http://127.0.0.1:5000/query', 
+    response = requests.post('http://localhost:5000/query', 
                              json={'prompt': prompt, 
                                    'collection_name': selected_db_name,
                                    "num_results":NUM_RETRIEVAL_RESULTS}
                                    )
-    print(response)
+    print('retreivals from server response: ', response)
     result = response.json()
     return result 
 
