@@ -3,6 +3,8 @@ todo.md
 
 ####
 .env
+.env.remote
+aws_chroma_setup.sh
 __pycache__/
 .DS_Store
 pysqlite3/

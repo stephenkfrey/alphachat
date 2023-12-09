@@ -4,8 +4,22 @@ import requests
 import json
 #from openai import OpenAI
 import openai
+from dotenv import load_dotenv
+load_dotenv()
 
 from openai_functions import create_chat_completion
+
+############ Env and remote url  ############
+ENVIRONMENT = os.environ.get('CURRENT_ENVIRONMENT')
+
+if ENVIRONMENT == 'LOCAL':
+    CONNECTION_URL = "localhost"
+    CONNECTION_PORT = 5000
+elif ENVIRONMENT == 'REMOTE':
+    CONNECTION_URL = DATABASE_REMOTE_URL = os.environ.get("DATABASE_REMOTE_URL")
+    CONNECTION_PORT = 8000
+
+### Vars #### 
 
 RETRIEVAL_RELEVANCE_THRESHOLD=0.3
 NUM_RETRIEVAL_RESULTS = 3
@@ -53,14 +67,24 @@ for msg in messages:
 
 def get_retrievals_from_server(prompt): 
     selected_db_name = selected_db.replace('\n', '').replace(' ', '')
-    response = requests.post('http://localhost:5000/query', 
-                             json={'prompt': prompt, 
-                                   'collection_name': selected_db_name,
-                                   "num_results":NUM_RETRIEVAL_RESULTS}
-                                   )
-    print('retreivals from server response: ', response)
-    result = response.json()
-    return result 
+
+    try:
+        response = requests.post(f"http://{CONNECTION_URL}:{CONNECTION_PORT}/query", 
+                                 json={'prompt': prompt, 
+                                       'collection_name': selected_db_name,
+                                       "num_results":NUM_RETRIEVAL_RESULTS}
+                                       )
+        if response.status_code == 200:
+            result = response.json()
+            return result
+        else:
+            # Handle non-200 status code
+            print ('response: ', response)
+            return None
+    except Exception as e:
+        # Handle other exceptions
+        print(f"Error: {e}")
+        return None
 
 ############ Main conversation and retrieval loop ############
 
@@ -76,6 +100,7 @@ if user_prompt := st.chat_input(placeholder="How do generative video models work
 
         ########### Get and filter retrievals ###########
         retrievals = get_retrievals_from_server(user_prompt) 
+        print('\n-----retreivals-----\n',retrievals)
 
         # Filter out retrievals with distance greater than THRESHOLD 
         filtered_retrievals = [doc for doc, dist in zip(retrievals['documents'][0], retrievals['distances'][0]) if dist > RETRIEVAL_RELEVANCE_THRESHOLD]

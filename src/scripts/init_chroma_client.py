@@ -5,6 +5,8 @@ load_dotenv()
 
 from config import COLLECTION_NAME, TEST_COLLECTION_NAME, DATABASE_LOCAL_PATH, DATABASE_REMOTE_URL
 
+REMOTE_PORT = os.environ.get("REMOTE_PORT")
+
 ###############################################
 ####################################
 ## Sqlite3 replacement for Chroma ##
@@ -27,7 +29,7 @@ def setup_local_chroma_client():
     return CHROMA_CLIENT
 
 def setup_remote_chroma_client():
-    CHROMA_CLIENT = chromadb.HTTPClient(DATABASE_REMOTE_URL, Settings(allow_reset="True"))
+    CHROMA_CLIENT = chromadb.HttpClient(host=DATABASE_REMOTE_URL, port=8000, settings=Settings(allow_reset=True))
     print('chroma heartbeat: ', CHROMA_CLIENT.heartbeat()) # returns a nanosecond heartbeat
     return CHROMA_CLIENT
 
