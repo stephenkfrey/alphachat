@@ -26,11 +26,13 @@ from chromadb.config import Settings
 def setup_local_chroma_client(): 
     CHROMA_CLIENT = chromadb.PersistentClient(DATABASE_LOCAL_PATH, Settings(allow_reset="True"))
     print('chroma heartbeat: ', CHROMA_CLIENT.heartbeat()) # returns a nanosecond heartbeat
+    print('chroma host: ', DATABASE_LOCAL_PATH)
     return CHROMA_CLIENT
 
 def setup_remote_chroma_client():
     CHROMA_CLIENT = chromadb.HttpClient(host=DATABASE_REMOTE_URL, port=8000, settings=Settings(allow_reset=True))
     print('chroma heartbeat: ', CHROMA_CLIENT.heartbeat()) # returns a nanosecond heartbeat
+    print('chroma host: ', DATABASE_REMOTE_URL)
     return CHROMA_CLIENT
 
 ###############################################

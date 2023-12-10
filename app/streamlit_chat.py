@@ -7,7 +7,12 @@ import openai
 from dotenv import load_dotenv
 load_dotenv()
 
+import sys
+import os
+sys.path.append(os.path.abspath('../src'))  # Assuming 'src' is located in a sibling directory of the current file's parent directory
+
 from openai_functions import create_chat_completion
+from src.scripts.db_query_data import query_db
 
 ############ Env and remote url  ############
 ENVIRONMENT = os.environ.get('CURRENT_ENVIRONMENT')
@@ -65,26 +70,26 @@ for msg in messages:
 
 ############ Helper fun ############
 
-def get_retrievals_from_server(prompt): 
-    selected_db_name = selected_db.replace('\n', '').replace(' ', '')
+# def get_retrievals_from_server(prompt): 
+#     selected_db_name = selected_db.replace('\n', '').replace(' ', '')
 
-    try:
-        response = requests.post(f"http://{CONNECTION_URL}:{CONNECTION_PORT}/query", 
-                                 json={'prompt': prompt, 
-                                       'collection_name': selected_db_name,
-                                       "num_results":NUM_RETRIEVAL_RESULTS}
-                                       )
-        if response.status_code == 200:
-            result = response.json()
-            return result
-        else:
-            # Handle non-200 status code
-            print ('response: ', response)
-            return None
-    except Exception as e:
-        # Handle other exceptions
-        print(f"Error: {e}")
-        return None
+#     try:
+#         response = requests.post(f"http://{CONNECTION_URL}:{CONNECTION_PORT}/query", 
+#                                  json={'prompt': prompt, 
+#                                        'collection_name': selected_db_name,
+#                                        "num_results":NUM_RETRIEVAL_RESULTS}
+#                                        )
+#         if response.status_code == 200:
+#             result = response.json()
+#             return result
+#         else:
+#             # Handle non-200 status code
+#             print ('response: ', response)
+#             return None
+#     except Exception as e:
+#         # Handle other exceptions
+#         print(f"Error: {e}")
+#         return None
 
 ############ Main conversation and retrieval loop ############
 
@@ -94,27 +99,14 @@ if user_prompt := st.chat_input(placeholder="How do generative video models work
         # st.chat_message("user").write(user_prompt)
         body.chat_message("user").write(user_prompt)
 
-        ########### Get LLM response ###########
-        response = create_chat_completion(messages=messages)
-        st.session_state["response"] = response
-
-        ########### Get and filter retrievals ###########
-        retrievals = get_retrievals_from_server(user_prompt) 
+        ########### Get and filter retrievals/images ###########
+        retrievals = query_db(user_prompt) 
         print('\n-----retreivals-----\n',retrievals)
 
         # Filter out retrievals with distance greater than THRESHOLD 
         filtered_retrievals = [doc for doc, dist in zip(retrievals['documents'][0], retrievals['distances'][0]) if dist > RETRIEVAL_RELEVANCE_THRESHOLD]
         retrievals['documents'][0] = filtered_retrievals
         print(retrievals)
-    #################################################
-
-    ########### Display text response and images ###########
-    with st.chat_message("assistant"):
-        messages.append({"role": "assistant", "content": st.session_state["response"]})
-
-        # body.write(st.session_state["response"])
-        body.markdown(f"<p style='font-size:20px;'>{st.session_state['response']}</p>", unsafe_allow_html=True)
-        # st.write(st.session_state["response"])
 
         ##### Display retrieved images #### 
         # sidebar.write(retrievals) ## displays the raw text 
@@ -133,6 +125,20 @@ if user_prompt := st.chat_input(placeholder="How do generative video models work
             page_title = metadata['page_title']
             page_url = metadata['page_url']
             sidebar.markdown(f"[{page_title}]({page_url})")
+        
+        ########### Get LLM response ###########
+        response = create_chat_completion(messages=messages)
+        st.session_state["response"] = response
+
+    ########### Display text response ###########
+    with st.chat_message("assistant"):
+        messages.append({"role": "assistant", "content": st.session_state["response"]})
+
+        # body.write(st.session_state["response"])
+        body.markdown(f"<p style='font-size:20px;'>{st.session_state['response']}</p>", unsafe_allow_html=True)
+        # st.write(st.session_state["response"])
+
+
 
 ####### Suggested Prompts ######
 if st.session_state["response"]:
