@@ -2,6 +2,8 @@
 import os
 import sys
 import uuid
+import logging
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -14,6 +16,7 @@ REMOTE_PORT = os.environ.get("REMOTE_PORT")
 ## Local Sqlite3 replacement for Chroma (if running locally on Intel Mac) ##
 
 print('CURRENT_HOST: ', os.environ.get('CURRENT_HOST'))
+logging.info('CURRENT_HOST: ', os.environ.get('CURRENT_HOST'))
 if os.environ.get('CURRENT_HOST') == 'LOCAL':
     import pysqlite3
     sys.modules['sqlite3'] = pysqlite3
@@ -21,6 +24,7 @@ if os.environ.get('CURRENT_HOST') == 'LOCAL':
     print(sys.modules['sqlite3'])
 
 if os.environ.get('CURRENT_HOST') == "REMOTE": 
+
     __import__('pysqlite3')
     import sys
     import os
