@@ -7,7 +7,7 @@ todo.md
 aws_chroma_setup.sh
 __pycache__/
 .DS_Store
-pysqlite3/
+# pysqlite3/
 testing/
 sqlite/
 src/scripts/__pycache__/
