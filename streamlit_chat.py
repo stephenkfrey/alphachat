@@ -9,9 +9,16 @@ load_dotenv()
 
 import sys
 import os
-sys.path.append(os.path.abspath('../src'))  # Assuming 'src' is located in a sibling directory of the current file's parent directory
+# sys.path.append(os.path.abspath('../src'))  # Assuming 'src' is located in a sibling directory of the current file's parent directory
 
-from openai_functions import create_chat_completion
+from app.openai_functions import create_chat_completion, create_streaming_chat_completion
+
+# print(os.getcwd()) # /Users/stephen/Dev/alphac
+# sys.path.append(os.path.abspath('..'))
+
+sys.path.append(os.path.abspath('../'))
+# print('syspath---\n',sys.path)
+
 from src.scripts.db_query_data import query_db
 
 ############ Env and remote url  ############
@@ -39,6 +46,22 @@ st.set_page_config(
 # st.title("✨ AlphaChat ✨")
 st.markdown("<h1 style='text-align: center;'>✨ AlphaChat ✨</h1>", unsafe_allow_html=True)
 
+############ Streamlit font customization ############
+# to use with bionic font eventually 
+# https://alive-son-632.notion.site/Bionic-Reading-API-v1-d91e2c4a69ee46ceaf750fd090f95046
+
+# streamlit_style = """
+# 			<style>
+# 			@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+# 			html, body, [class*="css"]  {
+# 			font-family: 'Roboto', sans-serif;
+# 			}
+# 			</style>
+# 			"""
+# st.markdown(streamlit_style, unsafe_allow_html=True)
+
+
 ############ Select a collection ############
 one,two,three,four,five=st.columns(5)
 # Read the database names from db_names.txt
@@ -58,12 +81,16 @@ sidebar.markdown("### Images")
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
+        {"role": "system", "content": "You are an expert teacher and explainer. You are here to help people understand complex topics. Next to your prompt, the user is being shown a list of images and diagrams related to their question, so don't mention that you can't show images/diagrams. "},
         {"role": "assistant", "content": "👀 🔎 🌍. What do you want to understand more?"}
     ]
 if "response" not in st.session_state:
     st.session_state["response"] = None
 
 messages = st.session_state.messages
+messages = [msg for msg in messages if msg["role"] != "system"]
+
+
 for msg in messages:
     # st.chat_message(msg["role"]).write(msg["content"])
     body.chat_message(msg["role"]).write(msg["content"])
@@ -95,18 +122,18 @@ for msg in messages:
 
 if user_prompt := st.chat_input(placeholder="How do generative video models work?"):
     with st.spinner("👀"):
-        messages.append({"role": "user", "content": user_prompt})
+        st.session_state.messages.append({"role": "user", "content": user_prompt})
         # st.chat_message("user").write(user_prompt)
         body.chat_message("user").write(user_prompt)
 
         ########### Get and filter retrievals/images ###########
         retrievals = query_db(user_prompt) 
-        print('\n-----retreivals-----\n',retrievals)
+        # print('\n-----retreivals-----\n',retrievals)
 
         # Filter out retrievals with distance greater than THRESHOLD 
         filtered_retrievals = [doc for doc, dist in zip(retrievals['documents'][0], retrievals['distances'][0]) if dist > RETRIEVAL_RELEVANCE_THRESHOLD]
         retrievals['documents'][0] = filtered_retrievals
-        print(retrievals)
+        print('\n-----retreivals-----\n',retrievals)
 
         ##### Display retrieved images #### 
         # sidebar.write(retrievals) ## displays the raw text 
@@ -126,18 +153,26 @@ if user_prompt := st.chat_input(placeholder="How do generative video models work
             page_url = metadata['page_url']
             sidebar.markdown(f"[{page_title}]({page_url})")
         
-        ########### Get LLM response ###########
-        response = create_chat_completion(messages=messages)
-        st.session_state["response"] = response
+        ########### Get static LLM response ###########
+        # response = create_chat_completion(messages=messages)
+        # st.session_state["response"] = response
 
-    ########### Display text response ###########
+    ########### Display streaming LLM text response ###########
     with st.chat_message("assistant"):
-        messages.append({"role": "assistant", "content": st.session_state["response"]})
+        this_response_message = ""
+        message_placeholder = body.empty()
 
-        # body.write(st.session_state["response"])
-        body.markdown(f"<p style='font-size:20px;'>{st.session_state['response']}</p>", unsafe_allow_html=True)
-        # st.write(st.session_state["response"])
+    for response in create_streaming_chat_completion(messages=st.session_state.messages):
+        print('response: ', response)
+        this_response_message += (response.choices[0].delta.content or "")
+        print('this_response_message: ', this_response_message)
+        message_placeholder.markdown(this_response_message + " ")
+        # message_placeholder.markdown(f"<p style='font-size:16px;'>{this_response_message}</p>", unsafe_allow_html=True)
 
+
+    st.session_state.messages.append({"role": "assistant", "content": this_response_message})
+
+    print ('message_placeholder: \n ', message_placeholder, '\n\nsession-state-messages: \n', st.session_state.messages, '\n\nresponse: \n', response)
 
 
 ####### Suggested Prompts ######
