@@ -1,5 +1,6 @@
 # use dotenv to load environemnt 
 import os
+import sys
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,13 +10,13 @@ REMOTE_PORT = os.environ.get("REMOTE_PORT")
 
 ###############################################
 ####################################
-## Sqlite3 replacement for Chroma ##
-import os
-import sys
-import pysqlite3
-sys.modules['sqlite3'] = pysqlite3
-sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
-print(sys.modules['sqlite3'])
+## Local Sqlite3 replacement for Chroma (if running locally on Intel Mac) ##
+
+if os.environ.get('CURRENT_HOST') == 'LOCAL':
+    import pysqlite3
+    sys.modules['sqlite3'] = pysqlite3
+    sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
+    print(sys.modules['sqlite3'])
 ####################################
 import uuid
 import chromadb
