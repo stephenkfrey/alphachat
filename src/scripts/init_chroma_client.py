@@ -24,7 +24,6 @@ if os.environ.get('CURRENT_HOST') == 'LOCAL':
     print(sys.modules['sqlite3'])
 
 if os.environ.get('CURRENT_HOST') == "REMOTE": 
-
     __import__('pysqlite3')
     import sys
     import os
