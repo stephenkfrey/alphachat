@@ -19,6 +19,13 @@ if os.environ.get('CURRENT_HOST') == 'LOCAL':
     sys.modules['sqlite3'] = pysqlite3
     sys.modules['sqlite3'].sqlite_version_info = (3,35,0)
     print(sys.modules['sqlite3'])
+
+if os.environ.get('CURRENT_HOST') == "REMOTE": 
+    __import__('pysqlite3')
+    import sys
+    import os
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 ####################################
 import chromadb
 from chromadb.utils import embedding_functions
