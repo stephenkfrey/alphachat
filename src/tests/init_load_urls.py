@@ -9,9 +9,11 @@ arxiv_vanity_links = []
 
 if user_command.upper() == "TEST":
     arxiv_vanity_links = [
-        "https://www.arxiv-vanity.com/papers/2204.06125/",
-        "https://www.arxiv-vanity.com/papers/2201.03545/",
-        "https://www.arxiv-vanity.com/papers/2208.12266/",
+        # "https://www.arxiv-vanity.com/papers/2204.06125/",
+        # "https://www.arxiv-vanity.com/papers/2201.03545/",
+        # "https://www.arxiv-vanity.com/papers/2208.12266/",
+        "https://arxiv.org/abs/2303.05510"
+
     ]
 elif user_command.upper() == "FULL":
     arxiv_vanity_links = [
