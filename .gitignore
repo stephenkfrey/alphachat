@@ -11,3 +11,5 @@ __pycache__/
 testing/
 sqlite/
 src/scripts/__pycache__/
+chromadb/
+test.md

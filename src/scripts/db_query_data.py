@@ -1,7 +1,8 @@
 from init_chroma_client import CHROMA_CLIENT, QA_EMBED_FUN 
+from config import NUM_RETRIEVAL_RESULTS 
 
 ############ Query document ############
-def query_db(query_text, collection_name="AIML", num_results=2): 
+def query_db(query_text, collection_name="AIML", num_results=NUM_RETRIEVAL_RESULTS): 
     print("query text ",query_text)
 
     try: 

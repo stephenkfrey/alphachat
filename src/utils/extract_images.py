@@ -62,7 +62,8 @@ def extract_image_caption_sets_from_url(url, save_directory="./downloaded_images
     for index, img in enumerate(images):
         image_url = img['src']
         if image_url.startswith('data:image'):  # Base64 encoded image
-            continue 
+            continue  
+        image_url = f"https://ar5iv.labs.arxiv.org{image_url}" # for legit ones, 
 
         image_name = f"image_{index}.png"
         # download_image(url, image_url, image_name, save_directory)
@@ -90,13 +91,28 @@ def extract_image_caption_sets_from_url(url, save_directory="./downloaded_images
 
 ###### Example ###### 
 
-# url = "https://www.arxiv-vanity.com/papers/2208.12266/"
-# save_directory = "downloaded_images" 
+url = "https://ar5iv.labs.arxiv.org/html/1412.1897/"
+save_directory = "downloaded_images" 
 
-# if not os.path.exists(save_directory):
-#     os.makedirs(save_directory)
+if not os.path.exists(save_directory):
+    os.makedirs(save_directory)
 
-# image_caption_pairs = extract_image_caption_sets_from_url(url)
+image_caption_pairs = extract_image_caption_sets_from_url(url)
 
-# pprint(image_caption_pairs)
+pprint(image_caption_pairs)
 
+# {'caption': 'Figure 13: Images found by maximizing the softmax output for '
+#              'classes via gradient ascent\xa0[11, 26]. Optimization begins at '
+#              'the ImageNet mean (plus small Gaussian noise to break symmetry) '
+#              'and continues until the DNN confidence for the target class '
+#              'reaches 99.99%.\n'
+#              'Images are shown with the mean subtracted.\n'
+#              'Adding regularization makes images more recognizable but results '
+#              'in slightly lower confidence scores (see supplementary '
+#              'material).',
+#   'image_url': '/html/1412.1897/assets/images/gradient_descent_nodecay_less.jpg',
+#   'page_title': '[1412.1897] Deep Neural Networks are Easily Fooled: High '
+#                 'Confidence Predictions for Unrecognizable Images'},
+
+
+# https://ar5iv.labs.arxiv.org/html/1412.1897/assets/x5.png
